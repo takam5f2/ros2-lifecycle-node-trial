@@ -44,8 +44,8 @@ public:
     std::string this_namespace = this->get_namespace();
     std::string chatter_topic_name = "lc_chatter";
     std::string trans_topic_name = "/lc_talker/transition_event";
-    if (!this_namespace.empty()) {
-      chatter_topic_name = this_namespace + "/lc_chatter";
+    if (this_namespace != "/") {
+      chatter_topic_name = this_namespace + "lc_chatter";
       trans_topic_name = this_namespace + trans_topic_name;
     }
 
