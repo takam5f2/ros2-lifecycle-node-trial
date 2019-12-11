@@ -23,6 +23,8 @@ from launch_ros import get_default_launch_description
 import launch.substitutions
 import launch_ros.actions
 
+import lifecycle_msgs.msg
+
 def generate_launch_description():
     """
     just launch talker and listener node.
@@ -46,9 +48,6 @@ def generate_launch_description():
         output='screen'
     )
     ld.add_action(listener_node)
-
-    # shutdown lc_talker.
-    
 
     return ld
 
