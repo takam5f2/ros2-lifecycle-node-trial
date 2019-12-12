@@ -33,9 +33,10 @@ def generate_launch_description():
     ld = launch.LaunchDescription()
     namespace = 'ns0'
     
-    talker_node = launch_ros.actions.Node(
+    talker_node = launch_ros.actions.LifecycleNode(
         package='lifecycle_demo',
         node_executable='lc_talker',
+        node_name='lifecycle_talker',
         node_namespace=namespace,
         output='screen'
     )
