@@ -35,7 +35,7 @@ void LCTalker::send_msg(void) {
   State current_state = get_current_state();
 
   if (current_state.id() != lifecycle_msgs::msg::State::PRIMARY_STATE_ACTIVE) {
-    RCUTILS_LOG_INFO_NAMED(node_fullname_.c_str(), "I'm not active");
+    // RCUTILS_LOG_INFO_NAMED(node_fullname_.c_str(), "I'm not active");
     return;
   }
   auto msg = std::make_unique<std_msgs::msg::String>();
