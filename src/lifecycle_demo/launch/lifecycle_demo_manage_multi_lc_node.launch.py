@@ -185,9 +185,6 @@ def generate_launch_description():
         )
     ))
 
-
-
-
     for i in range(1, node_num, 2):
         ld.add_action(launch.actions.RegisterEventHandler(
             launch_ros.event_handlers.OnStateTransition(
@@ -207,6 +204,38 @@ def generate_launch_description():
         ))
 
 
+    # change all nodes state from deactivate to shutdown.
+    for i in range(node_num):
+        ld.add_action(launch.actions.RegisterEventHandler(
+            launch_ros.event_handlers.OnStateTransition(
+                target_lifecycle_node=talker_node_array[7],
+                start_state='deactivating', goal_state='inactive',
+                entities=[
+                    launch.actions.EmitEvent(event=launch_ros.events.lifecycle.ChangeState(
+                        lifecycle_node_matcher=launch.events.matches_action(talker_node_array[i]),
+                        transition_id=lifecycle_msgs.msg.Transition.TRANSITION_INACTIVE_SHUTDOWN,
+                    )),
+                ],
+            ),
+        ))
+
+    
+    # terminate this process.
+    shutdown_this_process = launch.actions.RegisterEventHandler(
+        launch_ros.event_handlers.OnStateTransition(
+            target_lifecycle_node=talker_node_array[0],
+            start_state='shuttingdown', goal_state='finalized',
+            entities=[
+                # launch.actions.Shutdown(
+                #    reason="Terminates this launch file due to landing all states."
+                #)
+                launch.actions.EmitEvent(event=launch.events.Shutdown(
+                    reason="Terminates this launch process due to landing all states."
+                ))
+            ]
+        )
+    )
+    ld.add_action(shutdown_this_process)
 
     return ld
 
