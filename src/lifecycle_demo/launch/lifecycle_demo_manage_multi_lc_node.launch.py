@@ -140,23 +140,54 @@ def generate_launch_description():
 
 
     # change 3, 5, 7th node state from inactive to active per 5 seconds.
-    for i in range(3, node_num, 2):
-        counter = i
-        def message_output_handler(event):
-            target_str = "Sending message #5"
-            if target_str in event.text.decode():
-                return launch.actions.EmitEvent(event=launch_ros.events.lifecycle.ChangeState(
-                    lifecycle_node_matcher=launch.events.matches_action(talker_node_array[counter]),
-                    transition_id=lifecycle_msgs.msg.Transition.TRANSITION_ACTIVATE,
-                ))
+    def message_output_handler_3(event):
+        target_str = "Sending message #5"
+        if target_str in event.text.decode():
+            return launch.actions.EmitEvent(event=launch_ros.events.lifecycle.ChangeState(
+                lifecycle_node_matcher=launch.events.matches_action(talker_node_array[3]),
+                transition_id=lifecycle_msgs.msg.Transition.TRANSITION_ACTIVATE,
+            ))
 
-        ld.add_action(launch.actions.RegisterEventHandler(
-            launch.event_handlers.OnProcessIO(
-                target_action=listener_node_array[i-2],
-                on_stdout=message_output_handler,
-            )
-        ))
-    
+    ld.add_action(launch.actions.RegisterEventHandler(
+        launch.event_handlers.OnProcessIO(
+            target_action=listener_node_array[1],
+            on_stdout=message_output_handler_3,
+        )
+    ))
+
+    def message_output_handler_5(event):
+        target_str = "Sending message #5"
+        if target_str in event.text.decode():
+            return launch.actions.EmitEvent(event=launch_ros.events.lifecycle.ChangeState(
+                lifecycle_node_matcher=launch.events.matches_action(talker_node_array[5]),
+                transition_id=lifecycle_msgs.msg.Transition.TRANSITION_ACTIVATE,
+            ))
+
+    ld.add_action(launch.actions.RegisterEventHandler(
+        launch.event_handlers.OnProcessIO(
+            target_action=listener_node_array[3],
+            on_stdout=message_output_handler_5,
+        )
+    ))
+
+    def message_output_handler_7(event):
+        target_str = "Sending message #5"
+        if target_str in event.text.decode():
+            return launch.actions.EmitEvent(event=launch_ros.events.lifecycle.ChangeState(
+                lifecycle_node_matcher=launch.events.matches_action(talker_node_array[7]),
+                transition_id=lifecycle_msgs.msg.Transition.TRANSITION_ACTIVATE,
+            ))
+
+    ld.add_action(launch.actions.RegisterEventHandler(
+        launch.event_handlers.OnProcessIO(
+            target_action=listener_node_array[5],
+            on_stdout=message_output_handler_7,
+        )
+    ))
+
+
+
+
     for i in range(1, node_num, 2):
         ld.add_action(launch.actions.RegisterEventHandler(
             launch_ros.event_handlers.OnStateTransition(
