@@ -205,14 +205,27 @@ def generate_launch_description():
 
 
     # change all nodes state from deactivate to shutdown.
-    for i in range(node_num):
+    ld.add_action(launch.actions.RegisterEventHandler(
+        launch_ros.event_handlers.OnStateTransition(
+            target_lifecycle_node=talker_node_array[7],
+            start_state='deactivating', goal_state='inactive',
+            entities=[
+                launch.actions.EmitEvent(event=launch_ros.events.lifecycle.ChangeState(
+                    lifecycle_node_matcher=launch.events.matches_action(talker_node_array[i]),
+                    transition_id=lifecycle_msgs.msg.Transition.TRANSITION_INACTIVE_SHUTDOWN,
+                )),
+            ],
+        ),
+    ))
+
+    for i in range(node_num-1):
         ld.add_action(launch.actions.RegisterEventHandler(
             launch_ros.event_handlers.OnStateTransition(
-                target_lifecycle_node=talker_node_array[7],
-                start_state='deactivating', goal_state='inactive',
+                target_lifecycle_node=talker_node_array[node_num-i-1],
+                start_state='inactive', goal_state='shuttingdown',
                 entities=[
                     launch.actions.EmitEvent(event=launch_ros.events.lifecycle.ChangeState(
-                        lifecycle_node_matcher=launch.events.matches_action(talker_node_array[i]),
+                        lifecycle_node_matcher=launch.events.matches_action(talker_node_array[node_num-i-2]),
                         transition_id=lifecycle_msgs.msg.Transition.TRANSITION_INACTIVE_SHUTDOWN,
                     )),
                 ],
