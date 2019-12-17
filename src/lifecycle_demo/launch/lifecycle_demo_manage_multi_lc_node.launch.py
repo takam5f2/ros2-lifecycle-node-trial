@@ -211,7 +211,7 @@ def generate_launch_description():
             start_state='deactivating', goal_state='inactive',
             entities=[
                 launch.actions.EmitEvent(event=launch_ros.events.lifecycle.ChangeState(
-                    lifecycle_node_matcher=launch.events.matches_action(talker_node_array[i]),
+                    lifecycle_node_matcher=launch.events.matches_action(talker_node_array[7]),
                     transition_id=lifecycle_msgs.msg.Transition.TRANSITION_INACTIVE_SHUTDOWN,
                 )),
             ],
